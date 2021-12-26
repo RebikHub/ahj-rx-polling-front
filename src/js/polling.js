@@ -1,12 +1,34 @@
+import { Observable } from 'rxjs';
+
 export default class Polling {
   constructor(server) {
     this.server = server;
     this.messagees = document.querySelector('.messages');
+    this.message = null;
+    this.obs = {
+      next(v) {
+        return v;
+      },
+    };
   }
 
   async init() {
-    const ajaxData = await this.server.ajaxRx(this.render());
+    const ajaxData = await this.server.ajaxRx();
     console.log(ajaxData);
+    // ajaxData.subscribe({
+    //   next(v) {
+    //     this.message = v;
+    //     console.log(v);
+    //   },
+    //   complete() {
+    //     console.log('completed');
+    //   },
+    //   error(err) {
+    //     console.log(err);
+    //   },
+    // });
+    ajaxData.subscribe(this.obs);
+    console.log(this.obs);
   }
 
   render(message) {
