@@ -1,8 +1,15 @@
-import { Observable, fromEvent } from 'rxjs';
+// import { Observable, fromEvent } from 'rxjs';
+
+import Polling from './polling';
+import Server from './server';
 
 console.log('app started');
 
-const input = document.querySelector('.mail');
+const server = new Server();
+const widget = new Polling(server);
+
+widget.init();
+// const input = document.querySelector('.mail');
 
 // First helper
 
@@ -61,45 +68,45 @@ const input = document.querySelector('.mail');
 
 // RxJS
 
-const stream = new Observable((obs) => {
-  obs.next('Hi');
-  obs.next('my friend!');
-  fetch('https://jsonplaceholder.typicode.com/posts')
-    .then((response) => response.json())
-    .then((data) => {
-      obs.next(data);
-      obs.complete();
-    })
-    .catch((err) => obs.error(err));
-});
+// const stream = new Observable((obs) => {
+//   obs.next('Hi');
+//   obs.next('my friend!');
+//   fetch('https://jsonplaceholder.typicode.com/posts')
+//     .then((response) => response.json())
+//     .then((data) => {
+//       obs.next(data);
+//       obs.complete();
+//     })
+//     .catch((err) => obs.error(err));
+// });
 
-const logObserver = {
-  next(value) {
-    console.log(value);
-  },
-  error(err) {
-    console.log(err);
-  },
-  complete() {
-    console.log('completed');
-  },
-};
+// const logObserver = {
+//   next(value) {
+//     console.log(value);
+//   },
+//   error(err) {
+//     console.log(err);
+//   },
+//   complete() {
+//     console.log('completed');
+//   },
+// };
 
-const sub = stream.subscribe(logObserver);
-setTimeout(() => {
-  sub.unsubscribe();
-  console.log('stop stream');
-}, 2000);
+// const sub = stream.subscribe(logObserver);
+// setTimeout(() => {
+//   sub.unsubscribe();
+//   console.log('stop stream');
+// }, 2000);
 
-const userInput$ = fromEvent(input, 'input');
+// const userInput$ = fromEvent(input, 'input');
 
-const methods = {
-  next(val) {
-    console.log(val.target.value + '00');
-  },
-  completed() {
-    console.log('complete');
-  },
-};
+// const methods = {
+//   next(val) {
+//     console.log(val.target.value + '00');
+//   },
+//   completed() {
+//     console.log('complete');
+//   },
+// };
 
-userInput$.subscribe(methods);
+// userInput$.subscribe(methods);
