@@ -8,7 +8,7 @@ console.log('app started');
 const server = new Server();
 const widget = new Polling(server);
 
-widget.init();
+widget.startUpdate();
 // const input = document.querySelector('.mail');
 
 // First helper
