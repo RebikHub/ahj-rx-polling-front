@@ -1,5 +1,4 @@
 import { interval } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
 
 export default class Polling {
   constructor(server) {
@@ -14,17 +13,17 @@ export default class Polling {
 
   async responseMessages() {
     const ajaxData = await this.server.ajaxRx();
-    ajaxData
-      .pipe(
-        map((data) => (
-          data.messages.filter((elem) => elem.received > this.currentTime)
-        )),
-        catchError((err) => console.log(err.message)),
-      )
-      .subscribe((data) => {
+
+    ajaxData.subscribe(
+      (data) => {
+        data.messages.forEach((elem) => {
+          if (elem.received > this.currentTime) {
+            this.render(elem);
+          }
+        });
         this.currentTime = new Date().getTime();
-        data.forEach((elem) => this.render(elem));
-      });
+      }, (error) => console.log(error.message),
+    );
   }
 
   render(message) {
@@ -34,6 +33,7 @@ export default class Polling {
     const time = document.createElement('div');
     newMessage.classList.add('new-message');
     email.textContent = message.from;
+    email.style.width = '45%';
     newMessage.appendChild(email);
     if (message.subject.length > 15) {
       subject.textContent = `${message.subject.slice(0, 14)}...`;
@@ -44,7 +44,7 @@ export default class Polling {
     newMessage.appendChild(subject);
     time.textContent = Polling.getDate(message.received);
     newMessage.appendChild(time);
-    this.messagees.appendChild(newMessage);
+    this.messagees.insertBefore(newMessage, this.messagees.children[0]);
   }
 
   static getDate(time) {

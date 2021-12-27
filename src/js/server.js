@@ -2,7 +2,7 @@ import { ajax } from 'rxjs/ajax';
 
 export default class Server {
   constructor() {
-    this.url = 'http://localhost:3333';
+    this.url = 'https://rebikhub-http.herokuapp.com';
   }
 
   ajaxRx() {
